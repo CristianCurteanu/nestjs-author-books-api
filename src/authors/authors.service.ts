@@ -40,17 +40,7 @@ export class AuthorsService {
       birthdate: new Date(body.birthday),
     });
 
-    const errors = await validate(author);
-
-    const missingFieldsErrors = errors.map(e => e.constraints.presence).filter(e => e !== undefined);
-
-    if (missingFieldsErrors.length > 0) {
-      throw new BadRequestException(missingFieldsErrors.join(', '));
-    }
-
-    if (errors.length > 0) {
-      throw new UnprocessableEntityException(errors.map(e => Object.values(e.constraints).join(', ')).join('; '));
-    }
+    await this.validateFields(author)
 
     return await this.authorRepository.save(author);
   }
@@ -70,12 +60,31 @@ export class AuthorsService {
       author.birthdate = new Date(body.birthday)
     }
 
+    await this.validateFields(author)
+
     await this.authorRepository.update(id, author);
     return author;
   }
 
   async destroy(id: string): Promise<string> {
+    await this.findOneAuthor(id);
     await this.authorRepository.delete(id);
     return id;
+  }
+
+  private async validateFields(author: Author): Promise<Author> {
+    const errors = await validate(author);
+
+    const missingFieldsErrors = errors.map(e => e.constraints.presence).filter(e => e !== undefined);
+
+    if (missingFieldsErrors.length > 0) {
+      throw new BadRequestException(missingFieldsErrors.join(', '));
+    }
+
+    if (errors.length > 0) {
+      throw new UnprocessableEntityException(errors.map(e => Object.values(e.constraints).join(', ')).join('; '));
+    }
+
+    return author;
   }
 }
