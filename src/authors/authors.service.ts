@@ -5,22 +5,31 @@ import { Repository } from 'typeorm';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import {validate} from 'class-validator';
+import { Book } from './../books/books.model';
 
 @Injectable()
 export class AuthorsService {
   constructor(
     @InjectRepository(Author)
     private readonly authorRepository: Repository<Author>,
+    @InjectRepository(Book)
+    private readonly bookRepository: Repository<Book>,
   ) {}
 
   async getAll(): Promise<Author[]> {
     return await this.authorRepository.find();
   }
 
+  async getBooks(id: string) {
+    await this.findOneAuthor(id);
+    const books = await this.bookRepository.find({ authorID: id });
+    return books;
+  }
+
   async findOneAuthor(id: string): Promise<Author> {
     const author = await this.authorRepository.findOne(id);
     if (author === null || author === undefined) {
-      throw new NotFoundException(`No author with id '${id}'`);
+      throw new NotFoundException(`No author with id '${id}' found`);
     }
     return author;
   }
@@ -40,7 +49,7 @@ export class AuthorsService {
       birthdate: new Date(body.birthday),
     });
 
-    await this.validateFields(author)
+    await this.validateFields(author);
 
     return await this.authorRepository.save(author);
   }
@@ -57,10 +66,10 @@ export class AuthorsService {
     }
 
     if (body.birthday !== undefined) {
-      author.birthdate = new Date(body.birthday)
+      author.birthdate = new Date(body.birthday);
     }
 
-    await this.validateFields(author)
+    await this.validateFields(author);
 
     await this.authorRepository.update(id, author);
     return author;

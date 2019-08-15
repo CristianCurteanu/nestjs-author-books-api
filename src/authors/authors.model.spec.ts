@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthorsService } from './authors.service';
 import { Author } from './authors.model';
-import {validate} from "class-validator"
+import {validate} from 'class-validator';
 import { async } from 'rxjs/internal/scheduler/async';
 
 describe('AuthorsService', () => {
