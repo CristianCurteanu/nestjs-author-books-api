@@ -1,10 +1,12 @@
-import { Controller, Post, Body, Get, BadRequestException, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete, Req } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
-import { async } from 'rxjs/internal/scheduler/async';
+import { BooksService } from 'src/books/books.service';
 
 @Controller('authors')
 export class AuthorsController {
-  constructor(private readonly authorsService: AuthorsService) {}
+  constructor(
+    private readonly authorsService: AuthorsService,
+  ) {}
 
   @Get()
   async getAuthors() {
@@ -14,6 +16,11 @@ export class AuthorsController {
   @Get(':id')
   async findAuthor(@Param('id') id: string) {
     return await this.authorsService.findOneAuthor(id);
+  }
+
+  @Get('/:id/books')
+  async getAuthorsBooks(@Param() params) {
+    return await this.authorsService.getBooks(params.id);
   }
 
   @Post()
@@ -29,6 +36,6 @@ export class AuthorsController {
   @Delete(':id')
   async destroyAuthor(@Param('id') id: string) {
     await this.authorsService.destroy(id);
-    return { id }
+    return { id };
   }
 }
