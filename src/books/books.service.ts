@@ -49,6 +49,10 @@ export class BooksService {
     authorID: string,
     publishedAt: string,
   }): Promise<Book> {
+    if (Array.isArray(body)) {
+      throw new BadRequestException('Body should not be an array');
+    }
+
     const book = await this.getBook(id);
 
     if (body.title) {
