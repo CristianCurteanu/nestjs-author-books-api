@@ -68,7 +68,7 @@ export class BooksService {
     }
 
     if (body.authorID) {
-      book.title = body.title;
+      book.authorID = body.authorID;
     }
 
     await this.validateFields(book);

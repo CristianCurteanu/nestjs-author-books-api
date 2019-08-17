@@ -1,11 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthorsService } from './authors.service';
+
 import { Author } from './authors.model';
 import {validate} from 'class-validator';
-import { async } from 'rxjs/internal/scheduler/async';
 
-describe('AuthorsService', () => {
-  let author: Author
+describe('Author', () => {
+  let author: Author;
 
   beforeEach(async () => {
     author = new Author();
@@ -16,6 +14,7 @@ describe('AuthorsService', () => {
     author.birthdate = new Date();
     const errors = await validate(author);
     expect(errors.length).not.toBe(0);
+    expect(errors[0].constraints.presence).toBe('First name missing')
   });
 
   it('should have last name', async () => {
@@ -23,6 +22,7 @@ describe('AuthorsService', () => {
     author.birthdate = new Date();
     const errors = await validate(author);
     expect(errors.length).not.toBe(0);
+    expect(errors[0].constraints.presence).toBe('Last name missing')
   });
 
   it('should have birthdate', async () => {
@@ -30,8 +30,6 @@ describe('AuthorsService', () => {
     author.lastName = 'Smith';
     const errors = await validate(author);
     expect(errors.length).not.toBe(0);
+    expect(errors[0].constraints.isDate).toBe('Invalid format for author\'s birthdate')
   });
-
-  // TODO: Define has many relations with book entity
-  // it('should have many books')
 });

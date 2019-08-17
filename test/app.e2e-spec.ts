@@ -451,6 +451,7 @@ describe('AuthorsController (e2e)', () => {
               .patch(`/books/${book.id}`)
               .send({
                 title: 'Test updated title',
+                authorID: '5d53acd44dc1505ea09413c7',
               })
               .expect(200)
               .expect((resp) => {

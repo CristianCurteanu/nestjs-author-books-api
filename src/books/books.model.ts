@@ -14,11 +14,11 @@ export class Book {
   @IsString()
   title: string;
 
-  @ObjectIdColumn()
+  @Column()
   @Validate(Presence, {
     message: 'Author is missing',
   })
-  authorID: ObjectID;
+  authorID: string;
 
   @Column()
   @Validate(Presence, {
