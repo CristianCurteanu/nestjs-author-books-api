@@ -22,7 +22,7 @@ export class AuthorsService {
 
   async getBooks(id: string) {
     const author = await this.findOneAuthor(id);
-    const books = await this.bookRepository.find({ authorID: author.id });
+    const books = await this.bookRepository.find({ authorID: author.id.toHexString() });
 
     return books;
   }
