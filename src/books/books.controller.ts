@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete, HttpCode } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { async } from 'rxjs/internal/scheduler/async';
 
@@ -8,7 +8,8 @@ export class BooksController {
 
   @Get(':id')
   async getBook(@Param() params) {
-    return await this.booksService.getBook(params.id);
+    const book = await this.booksService.getBook(params.id);
+    return book;
   }
 
   @Post()
@@ -27,8 +28,8 @@ export class BooksController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   async deleteBook(@Param('id') id: string) {
     await this.booksService.destroy(id);
-    return { id };
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Patch, Delete, Req } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Patch, Delete, HttpCode } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
 import { BooksService } from 'src/books/books.service';
 
@@ -20,7 +20,9 @@ export class AuthorsController {
 
   @Get('/:id/books')
   async getAuthorsBooks(@Param() params) {
-    return await this.authorsService.getBooks(params.id);
+    const books = await this.authorsService.getBooks(params.id);
+
+    return books;
   }
 
   @Post()
@@ -34,8 +36,8 @@ export class AuthorsController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   async destroyAuthor(@Param('id') id: string) {
     await this.authorsService.destroy(id);
-    return { id };
   }
 }

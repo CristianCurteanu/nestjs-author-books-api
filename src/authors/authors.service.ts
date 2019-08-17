@@ -21,8 +21,9 @@ export class AuthorsService {
   }
 
   async getBooks(id: string) {
-    await this.findOneAuthor(id);
-    const books = await this.bookRepository.find({ authorID: id });
+    const author = await this.findOneAuthor(id);
+    const books = await this.bookRepository.find({ authorID: author.id });
+
     return books;
   }
 

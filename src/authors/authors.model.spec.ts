@@ -5,19 +5,13 @@ import {validate} from 'class-validator';
 import { async } from 'rxjs/internal/scheduler/async';
 
 describe('AuthorsService', () => {
-  // let service: AuthorsService;
   let author: Author
 
   beforeEach(async () => {
-    // const module: TestingModule = await Test.createTestingModule({
-    //   providers: [AuthorsService],
-    // }).compile();
-
-    // service = module.get<AuthorsService>(AuthorsService);
+    author = new Author();
   });
 
   it('should have first name', async () => {
-    author = new Author();
     author.lastName = 'Smith';
     author.birthdate = new Date();
     const errors = await validate(author);
@@ -25,7 +19,6 @@ describe('AuthorsService', () => {
   });
 
   it('should have last name', async () => {
-    author = new Author();
     author.firstName = 'John';
     author.birthdate = new Date();
     const errors = await validate(author);
@@ -33,7 +26,6 @@ describe('AuthorsService', () => {
   });
 
   it('should have birthdate', async () => {
-    author = new Author();
     author.firstName = 'John';
     author.lastName = 'Smith';
     const errors = await validate(author);
