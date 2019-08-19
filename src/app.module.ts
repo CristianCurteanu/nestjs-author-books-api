@@ -14,7 +14,7 @@ import { Book } from './books/books.model';
     TypeOrmModule.forRoot({
       type: 'mongodb',
       useNewUrlParser: true,
-      url: 'mongodb://localhost:27017/authors_api',
+      url: process.env.DATABASE_URL || 'mongodb://localhost:27017/authors_api',
       entities: [
         Author,
         Book,
